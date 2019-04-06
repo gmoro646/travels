@@ -42,7 +42,7 @@ require('./routes/users')(app)
 
 
 
-var database, collection;
+var database, collection, demoCollection;
 app.use('/uploads', serveStatic(__dirname + '/uploads'));
 
 app.listen(8080, () => {
@@ -51,15 +51,25 @@ app.listen(8080, () => {
           throw error;
       }
       database = client.db(DATABASE_NAME);
-      collection = database.collection("images");
+			collection = database.collection("images");
+			demoCollection =  database.collection("demo");
       console.log("Connected to `" + DATABASE_NAME + "`!");
   });
 });
 
 app.post('/add', async function(req, res){
-  let toSave = new Demo(req.body)
-  let saved = await toSave.save();
-  res.send(saved);
+	let toSave = await demoCollection.insert(req.body)
+	if(toSave){
+		res.json({
+			success: true,
+			message: 'Added successfully'
+	});
+	}else{
+		res.status(403).json({
+			success: false,
+			message: 'Something went wrong'
+	});
+	}
 })
 
 app.get("/api/images", (request, response) => {

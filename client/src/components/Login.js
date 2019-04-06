@@ -7,6 +7,7 @@ class Home extends React.Component{
 
     constructor(props) {
         super(props);
+        this.isChecked = false
         this.state = {
             uploadInProgress: false,
             user: {},
@@ -42,7 +43,14 @@ class Home extends React.Component{
     }
     async login() {
         console.log(this.state)
+
         if (this.state.user.email && this.state.user.email != '' && this.state.user.password && this.state.user.password != '') {
+
+
+            if (this.isChecked == true) {
+                localStorage.setItem('user', JSON.stringify({ email: this.state.user.email, password: this.state.user.password}))
+            }
+
             let response = await this.executeAPI();
             
             var userdata = JSON.parse(response)
@@ -57,6 +65,10 @@ class Home extends React.Component{
         } else {
             alert('Please enter the username or password')
         }
+    }
+
+    getCheckbox(data) {
+        this.isChecked = data.currentTarget.checked
     }
 
 	render() {
@@ -88,7 +100,7 @@ class Home extends React.Component{
                                 }/>
                     <span className="focus-border"></span>
                     </div>
-
+                    <input type="checkbox" onChange={this.getCheckbox.bind(this)} name="vehicle1" value="Bike"/>Remember me
                     <input type="button" onClick={this.login.bind(this)} className="loginButton" value="Login" />
                     
                 </form>
