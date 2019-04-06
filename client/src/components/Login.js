@@ -44,14 +44,15 @@ class Home extends React.Component{
         console.log(this.state)
         if (this.state.user.email && this.state.user.email != '' && this.state.user.password && this.state.user.password != '') {
             let response = await this.executeAPI();
-            if (response.indexOf('success') > -1) {
-                var userdata = JSON.parse(response)
+            
+            var userdata = JSON.parse(response)
+            if (userdata.success == true && userdata.token) {
                 localStorage.setItem('token', userdata.token)
                 //browserHistory.push('/home');
                 //this.props.history.push('/home')
                 window.location.href = '/browse'
             } else {
-                alert('Incorrect username or password')
+                alert(userdata.message)
             }
         } else {
             alert('Please enter the username or password')
