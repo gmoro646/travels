@@ -12,6 +12,9 @@ return(
 <Link to='/about'>
 <button>About</button>
 </Link>
+<Link to='/Login'>
+<button>Logout</button>
+</Link>
 </nav>
 );
 }

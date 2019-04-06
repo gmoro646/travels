@@ -42,13 +42,20 @@ class Home extends React.Component{
     }
     async login() {
         console.log(this.state)
-        let response = await this.executeAPI();
-        console.log(response);
-        var userdata = JSON.parse(response)
-        localStorage.setItem('token', userdata.token)
-        //browserHistory.push('/home');
-        //this.props.history.push('/home')
-        window.location.href = '/home'
+        if (this.state.user.email && this.state.user.email != '' && this.state.user.password && this.state.user.password != '') {
+            let response = await this.executeAPI();
+            if (response.indexOf('success') > -1) {
+                var userdata = JSON.parse(response)
+                localStorage.setItem('token', userdata.token)
+                //browserHistory.push('/home');
+                //this.props.history.push('/home')
+                window.location.href = '/browse'
+            } else {
+                alert('Incorrect username or password')
+            }
+        } else {
+            alert('Please enter the username or password')
+        }
     }
 
 	render() {
