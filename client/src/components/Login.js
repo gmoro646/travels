@@ -7,11 +7,21 @@ class Home extends React.Component{
 
     constructor(props) {
         super(props);
+        if (props.location.hash && props.location.hash == "#0") {
+            localStorage.removeItem('token')
+        }
         this.isChecked = false
         this.state = {
             uploadInProgress: false,
             user: {},
         };
+        let userData = localStorage.getItem('user')
+        if (userData) {
+            userData = JSON.stringify(userData)
+            this.isChecked = true
+            this.state.user.email = userData.email
+            this.state.user.password = userData.password
+        }
     }
 
     updatePropertyValue(val, prop) {
@@ -100,8 +110,10 @@ class Home extends React.Component{
                                 }/>
                     <span className="focus-border"></span>
                     </div>
-                    <input type="checkbox" onChange={this.getCheckbox.bind(this)} name="vehicle1" value="Bike"/>Remember me
-                    <input type="button" onClick={this.login.bind(this)} className="loginButton" value="Login" />
+                    <span className="checkBox">
+                    <input type="checkbox" defaultChecked={this.isChecked} onChange={this.getCheckbox.bind(this)} name="vehicle1" value="Bike"/>Remember me
+                        </span>
+                       <input type="button" onClick={this.login.bind(this)} className="loginButton" value="Login" />
                     
                 </form>
             </div>

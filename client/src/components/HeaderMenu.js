@@ -15,7 +15,7 @@ return(
 <Link to='/upload-image'>
 <button>Upload Image</button>
 </Link>
-<Link to='/Login'>
+<Link to='/Login/#0'>
 <button>Logout</button>
 </Link>
 </nav>

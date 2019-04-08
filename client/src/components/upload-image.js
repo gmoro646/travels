@@ -2,15 +2,19 @@ import React, { Component } from 'react';
 import '../App.css';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import HeaderApp from './HeaderApp';
+import { ApiService } from '../Api-service';
 
 class UploadImage extends React.Component {
-
+    
     constructor(props) {
         super(props);
         this.state = {
             uploadInProgress: false,
             user: {  },
         };
+        this.apipath = ApiService.getapiPath()
+        console.log(this.apipath)
     }
 
     updatePropertyValue(val, prop) {
@@ -32,7 +36,7 @@ class UploadImage extends React.Component {
 
     async  uploadFile(file) {
         return new Promise((resolve, reject) => {
-            const apiUrl = 'http://localhost:8080/profile';
+            const apiUrl = this.apipath + 'profile';
             this.setState({
                 uploadInProgress: true
             });
@@ -81,10 +85,15 @@ class UploadImage extends React.Component {
     async createNewImage() {
         debugger;
         let fieldsall = this.allvaluefield();
+        if (!this.state.user || !this.state.user.image) {
+            alert("Please select image");
+            return;
+        }
         if (!fieldsall) {
             alert("Fill All required details");
             return;
         }
+        
         let uploaded = await this.createImageFinal(this.state.user);
         alert(uploaded ? "Add successful" : "Error in uploading");
     }
@@ -113,7 +122,7 @@ class UploadImage extends React.Component {
                 }
             };
 
-            xhr.open("POST", "http://localhost:8080/add");
+            xhr.open("POST", this.apipath + "add");
             xhr.setRequestHeader("content-type", "application/json");
             xhr.send(data);
         });
@@ -121,6 +130,9 @@ class UploadImage extends React.Component {
 
     render() {
         return (
+            <div>
+                <Helmet title="Upload Image" />
+                <HeaderApp pageTitle="Upload Image" />
             <div className="container">
                 <div className="featurette" id="about">
                     <div className="container">
@@ -217,6 +229,7 @@ class UploadImage extends React.Component {
                     </div>
                 </div>
             </div>
+         </div>
         );
     }
 }
